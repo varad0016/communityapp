@@ -1,13 +1,16 @@
-import express from "express";
-import { sendGroupMessage, getGroupMessages } from "../controllers/chat.controller.js";
-import { verifyJWT } from "../middlewares/authMiddleware.js";
+import express from 'express';
+import { createGroupMessage, getGroupMessages, getEventGroupMessages } from '../controllers/chat.controller.js';
+import { verifyJWT } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-// Send Message to a Group
-router.post("/:groupId/send", verifyJWT, sendGroupMessage);
+// Route for creating a group chat message
+router.post('/group', verifyJWT, createGroupMessage);
 
-// Get All Messages of a Group
-router.get("/:groupId/messages", verifyJWT, getGroupMessages);
+// Route for getting all messages in a group
+router.get('/group/:groupId', verifyJWT, getGroupMessages);
+
+// Route for getting all messages related to an event
+router.get('/event/:eventId', verifyJWT, getEventGroupMessages);
 
 export default router;

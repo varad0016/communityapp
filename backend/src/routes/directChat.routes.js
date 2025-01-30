@@ -1,13 +1,13 @@
-import express from "express";
-import { sendDirectMessage, getDirectMessages } from "../controllers/directChat.controller.js";
-import { verifyJWT } from "../middlewares/authMiddleware.js";
+import express from 'express';
+import { createDirectMessage, getDirectMessages } from '../controllers/directMessage.controller.js';
+import { verifyJWT } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-// Send Direct Message
-router.post("/:userId/send", verifyJWT, sendDirectMessage);
+// Route for creating a direct chat message
+router.post('/', verifyJWT, createDirectMessage);
 
-// Get All Direct Messages with a Specific User
-router.get("/:userId/messages", verifyJWT, getDirectMessages);
+// Route for getting all direct messages between a user and another user
+router.get('/:userId', verifyJWT, getDirectMessages);
 
 export default router;
