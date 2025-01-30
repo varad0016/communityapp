@@ -18,8 +18,12 @@ app.use(cookieParser())
 //routes import
 import userRouter from './routes/user.routes.js';
 import authRouter from './routes/auth.routes.js';
+import eventRouter from './routes/event.routes.js';
+import groupRouter from './routes/group.routes.js';
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/events" , eventRouter);
+app.use("/api/groups" , groupRouter);
 
 export { app }
