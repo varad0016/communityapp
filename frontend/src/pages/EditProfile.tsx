@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Phone, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import axiosInstance from '@/lib/axiosInstance';
 
 export function EditProfile() {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const userId = user._id;
+
 
     const [tempSkill, setTempSkill] = useState<string>('');
     const [profileData, setProfileData] = useState<any>(user);  // Initialize with stored user data
@@ -65,9 +66,16 @@ export function EditProfile() {
         setProfileData(updatedProfile);
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         try {
             localStorage.setItem('user', JSON.stringify(profileData));
+            const response = await axiosInstance.put("/users/profile" , {
+                name : profileData.name,
+                phone : profileData.phone,
+                bio : profileData.bio,
+                skills : profileData.skills,
+            });
+            console.log(response.data);
             alert('Profile updated successfully!');
             navigate('/profile');
         } catch (error) {

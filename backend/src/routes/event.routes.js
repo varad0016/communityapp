@@ -21,6 +21,6 @@ router.get('/getupcomingevents' , getUpcomingEvents);
 // Delete Event (Organizer/Admin only)
 router.delete("/:eventId", verifyJWT, deleteEvent);
 
-router.get('/user/events', getUserEvents);
+router.get('/user/events', verifyJWT,getUserEvents);
 
 export default router;

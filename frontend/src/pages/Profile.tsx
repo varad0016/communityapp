@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import axios from 'axios';
+import axiosInstance from '@/lib/axiosInstance';
+import { useAuth } from '@/context/authContext';
 
 export function Profile() {
     const navigate = useNavigate();
     const [profileData, setProfileData] = useState<any>(null);
     const [events, setEvents] = useState<any[]>([]);  // Ensure this is an array
     const [groups, setGroups] = useState<any[]>([]);
-
+    const {logout} = useAuth();
     // Default fallback values
     const defaultProfile = {
         name: 'Unknown User',
@@ -44,7 +45,7 @@ export function Profile() {
         // Fetch the user's events
         const fetchUserEvents = async () => {
             try {
-                const response = await axios.get('/api/user/events');
+                const response = await axiosInstance.get('/events/user/events');
                 // Ensure response data is an array
                 if (Array.isArray(response.data)) {
                     setEvents(response.data);
@@ -60,7 +61,7 @@ export function Profile() {
         // Fetch the user's groups
         const fetchUserGroups = async () => {
             try {
-                const response = await axios.get('/api/user/groups');
+                const response = await axiosInstance.get('/groups/user/groups');
                 // Handle null or invalid group data
                 setGroups(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
@@ -85,7 +86,7 @@ export function Profile() {
                     <div className="relative flex items-end space-x-4">
                         <div className="-mt-16">
                             <img
-                                src={data.profilePicture}
+                                src={"/download.jpeg"}
                                 alt="Profile"
                                 className="h-32 w-32 rounded-full border-4 border-white bg-white object-cover"
                             />
@@ -96,6 +97,7 @@ export function Profile() {
                         </div>
                         <div className="pt-4">
                             <Button onClick={() => navigate('/edit_prf')} variant="outline">Edit Profile</Button>
+                            <Button onClick={() => logout() } variant="outline" className=' hover:border-red-500 hover:text-red-600 ml-2' >Logout</Button>
                         </div>
                     </div>
                 </div>

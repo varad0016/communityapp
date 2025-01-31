@@ -34,6 +34,6 @@ router.delete("/:groupId/remove-member", verifyJWT, removeMember);
 // Delete Group
 router.delete("/:groupId", verifyJWT, deleteGroup);
 
-router.get('/user/groups', getUserGroups);
+router.get('/user/groups', verifyJWT,getUserGroups);
 
 export default router;

@@ -5,6 +5,6 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 router.get("/profile", verifyJWT, getUserProfile);
-router.put("/profile/:userId"  , updateProfile);
+router.put("/profile"  , verifyJWT,updateProfile);
 
 export default router;

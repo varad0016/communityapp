@@ -8,8 +8,8 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 // Update User Profile
 export const updateProfile = async (req, res) => {
     try {
-        const { userId } = req.params; // Extract userId from request parameters
-        const { name, bio, skills } = req.body; // Extract fields from request body
+        const  userId  = req.user._id; // Extract userId from request parameters
+        const { name, bio, skills  , phone} = req.body; // Extract fields from request body
 
         console.log(userId , name , bio , skills);
 
@@ -23,6 +23,7 @@ export const updateProfile = async (req, res) => {
         if (name) user.name = name;
         if (bio) user.bio = bio;
         if (skills) user.skills = skills;
+        if(phone) user.phone = phone;
 
 
         // Save updated user profile
