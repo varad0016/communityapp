@@ -143,3 +143,23 @@ export const deleteGroup = asyncHandler(async (req, res) => {
         message: "Group deleted successfully",
     });
 });
+
+
+// Controller to get groups created by the logged-in user
+export const getUserGroups = async (req, res) => {
+    try {
+        // Assuming user ID is stored in req.user._id after authentication middleware
+        const userId = req.user._id;
+
+        const groups = await Group.find({ createdBy: userId });
+
+        if (!groups.length) {
+            return res.status(404).json({ message: 'No groups found for this user.' });
+        }
+
+        return res.status(200).json(groups);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server Error' });
+    }
+};

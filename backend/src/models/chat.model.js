@@ -8,5 +8,5 @@ const MessageSchema = new mongoose.Schema({
   sentAt: { type: Date, default: Date.now },
 });
 
-const Message = mongoose.model('ChatMessage', chatMessageSchema);
+const Message = mongoose.model('ChatMessage', MessageSchema);
 export default Message;

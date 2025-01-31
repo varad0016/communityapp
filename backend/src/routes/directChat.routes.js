@@ -1,5 +1,5 @@
 import express from 'express';
-import { createDirectMessage, getDirectMessages } from '../controllers/directMessage.controller.js';
+import { createDirectMessage, getDirectMessages } from '../controllers/directChat.controller.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();

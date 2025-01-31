@@ -1,17 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
+import axiosInstance from '@/lib/axiosInstance';
+import { useAuth } from '@/context/authContext';
 
 export function Login() {
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement authentication logic
-    console.log('Logging in with', { email, password });
-    navigate('/'); // Redirect to home page after login
+    try {
+      const response = await axiosInstance.post('/auth/login', {
+        email,
+        password,
+      });
+
+      const { token , user } = response.data;
+      login(token ,JSON.stringify(user)); // Save the token and authenticate the user
+      navigate('/'); // Redirect to home page after login
+    } catch (err) {
+      console.log('Invalid credentials');
+    }
   };
 
   return (

@@ -1,9 +1,9 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
+import axiosInstance from '@/lib/axiosInstance'; // Import the axios instance
 
 const registerSchema = z.object({
   fullName: z.string().min(3, 'Full Name must be at least 3 characters long'),
@@ -15,17 +15,30 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 export function RegisterPage() {
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormData>({
+  const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log('Registering with', data);
-    navigate('/login'); // Redirect to login page after successful registration
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      // Send the registration data to the backend
+      const response = await axiosInstance.post('/auth/register', {
+        name: data.fullName,
+        email: data.email,
+        password: data.password,
+      });
+
+      const { token, user } = response.data;
+      console.log('Registration successful, token:', token);
+      
+      // You can save the token and authenticate the user if needed, similar to the login
+      // For example, if using context to manage authentication:
+      // login(token, JSON.stringify(user)); 
+
+      navigate('/login'); // Redirect to the login page after successful registration
+    } catch (err) {
+      console.log('Registration failed:', err);
+    }
   };
 
   return (

@@ -6,7 +6,8 @@ import {
     updateGroup,
     addMember,
     removeMember,
-    deleteGroup
+    deleteGroup,
+    getUserGroups
 } from "../controllers/group.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -32,5 +33,7 @@ router.delete("/:groupId/remove-member", verifyJWT, removeMember);
 
 // Delete Group
 router.delete("/:groupId", verifyJWT, deleteGroup);
+
+router.get('/user/groups', getUserGroups);
 
 export default router;

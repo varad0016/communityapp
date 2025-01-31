@@ -27,7 +27,6 @@ export const registerUser = asyncHandler(async (req, res) => {
 export const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    console.log(email,password);
 
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
         throw new ApiError(401, "Invalid email or password");
@@ -36,7 +35,7 @@ export const loginUser = asyncHandler(async (req, res) => {
     const token = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
     res.cookie("accessToken", token, { httpOnly: true });
 
-    res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({ message: "Login successful", token , user : user });
 });
 
 // Logout User

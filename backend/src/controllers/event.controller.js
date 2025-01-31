@@ -8,6 +8,20 @@ export const createEvent = asyncHandler(async (req, res) => {
     res.status(201).json({ message: "Event created successfully", event });
 });
 
+export const getUpcomingEvents = asyncHandler(async (req, res) => {
+    // Get the current date
+    const today = new Date();
+
+    // Fetch all events that are scheduled after today
+    const events = await Event.find({ eventDate: { $gte: today } })
+                              .populate('organizer group');
+
+    res.status(200).json({
+        message: "Upcoming events retrieved successfully",
+        data: events
+    });
+});
+
 // Get All Events
 export const getAllEvents = asyncHandler(async (req, res) => {
     const events = await Event.find();
@@ -54,3 +68,23 @@ export const deleteEvent = asyncHandler(async (req, res) => {
     await event.remove();
     res.status(200).json({ message: "Event deleted successfully" });
 });
+
+
+// Controller to get events created by the logged-in user
+export const getUserEvents = async (req, res) => {
+    try {
+        // Assuming user ID is stored in req.user._id after authentication middleware
+        const userId = req.user._id;
+
+        const events = await Event.find({ organizer: userId }).populate('group', 'name');
+        
+        if (!events.length) {
+            return res.status(404).json({ message: 'No events found for this user.' });
+        }
+
+        return res.status(200).json(events);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server Error' });
+    }
+};
